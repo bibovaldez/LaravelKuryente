@@ -35,7 +35,9 @@
                 </div>
 
                 {{--  sa time ako na dito basta yung desing ilagay mo nalan kasi masisingitan to ng function pati sa chart i love you --}}
-                <div class="bg-slate-300 h-1/6 w-full">Time |</div>
+                <div class="bg-slate-300 h-1/6 w-full">
+                    <h3>Time</h3>
+                </div>
 
                 <div class="bg-slate-200 h-full w-full">
                     {{-- chartjs --}}

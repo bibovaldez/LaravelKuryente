@@ -1,10 +1,10 @@
 import Chart from "chart.js/auto";
 
-let three_secs= true;
-let fifteen_min = false;
-let one_hour = false;
-let four = false;
-let one_day = false;
+let min= true;
+let hour = false;
+let day = false;
+let month = false;
+let year = false;
 
 
 // array of objects
