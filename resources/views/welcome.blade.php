@@ -37,7 +37,7 @@
         <div class="max-w-screen-xl mx-auto px-5 flex items-center justify-between">
             <div class="flex-1 ml-24">
                 <a href="/" class="inline-flex items-center">
-                    <x-application-logo class=" w-12 h-12 text-green-dark fill-current" />
+                    <x-application-logo style="height: 7%; width: 7%;" class=" w-12 h-12 text-green-dark fill-current" />
                 </a>
             </div>
             <ul class="relative hidden lg:flex lg:items-center lg:justify-center lg:gap-3  xl:gap-5">

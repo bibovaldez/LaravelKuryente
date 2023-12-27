@@ -26,7 +26,7 @@
         {{-- logo --}}
         <div class="z-10">
             <a href="/">
-                <x-application-logo class="w-20 h-20 fill-current" />
+                <x-application-logo style="height: 7%; width: 7%;" class="w-20 h-20 fill-current" />
             </a>
         </div>
         {{-- form --}}
