@@ -10,6 +10,7 @@ export default defineConfig({
                 'resources/js/registration.js',
                 'resources/js/meterJs/meterapp.js',
                 'resources/js/meterlistener.js',
+                'resources/js/dashboard/chart.js',
             ],
             refresh: true,
         }),

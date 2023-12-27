@@ -22,7 +22,7 @@ return new class extends Migration
             $table->string('Province');
             $table->string('Municipality');
             $table->string('Barangay');
-            $table->unsignedBigInteger('F_MID');
+            $table->string('F_MID');
             $table->string('username')->unique();
             $table->string('email')->unique();
             $table->enum('role',['admin','user'])->default('user');
