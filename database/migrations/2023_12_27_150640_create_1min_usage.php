@@ -11,11 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('electric_usage', function (Blueprint $table) {
+        Schema::create('1min_usage', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->unsignedBigInteger('meter_id');
-            $table->decimal('usage', 8, 8)->default(0.00000000);
+            $table->decimal('usage', 8, 8);
             $table->timestamp('recorded_at');
+            $table->decimal('usagemark', 8, 8);
             $table->foreign('meter_id')->references('id')->on('meter')->onDelete('cascade');
         });
     }
@@ -25,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('electric_usage');
+        Schema::dropIfExists('1min_usage');
     }
 };

@@ -41,6 +41,33 @@ return new class extends Migration
             SELECT id, DATE_FORMAT(CURRENT_DATE + INTERVAL 1 MONTH, "%Y-%m"), (present_reading - previous_reading) * rate
             FROM meter;
         ');
+        // event to update 1min_usage in every min
+        DB::unprepared('
+        CREATE EVENT update_1min_usage
+        ON SCHEDULE EVERY 1 MINUTE
+        DO
+            INSERT INTO 1min_usage (meter_id, `usage`, recorded_at, usagemark)
+            SELECT
+                m.id, (m.`present_reading` - m.`previous_reading`) -
+                COALESCE(
+                    (
+                        SELECT
+                            u.`usagemark`
+                        FROM
+                            `1min_usage` u
+                        WHERE
+                            u.`meter_id` = m.`id`
+                        ORDER BY
+                            u.`recorded_at` DESC
+                        LIMIT 1
+                    ),
+                    0
+                )  AS `usage`,
+                NOW() ,
+                present_reading
+            FROM
+                `meter` m;
+        ');
         // event to update 1hour_usage in every hour
         DB::unprepared('
         CREATE EVENT update_1hour_usage

@@ -17,7 +17,6 @@ return new class extends Migration
             $table->decimal('usage', 8, 8);
             $table->timestamp('recorded_at');
             $table->decimal('usagemark', 8, 8);
-            $table->timestamps();
             $table->foreign('meter_id')->references('id')->on('meter')->onDelete('cascade');
         });
     }

@@ -37,11 +37,18 @@
                 {{--  sa time ako na dito basta yung desing ilagay mo nalan kasi masisingitan to ng function pati sa chart i love you --}}
                 <div class="bg-slate-300 h-1/6 w-full">
                     <h3>Time</h3>
+                    <div class="flex gap-2" onclick="setTimeUnit('min')">1m</div>
+                    <div class="flex gap-2" onclick="setTimeUnit('hour')">1h</div>
+                    <div class="flex gap-2" onclick="setTimeUnit('day')">1d</div>
+                    <div class="flex gap-2" onclick="setTimeUnit('month')">1M</div>
+                    <div class="flex gap-2" onclick="setTimeUnit('year')">1y</div>
+
                 </div>
 
                 <div class="bg-slate-200 h-full w-full">
                     {{-- chartjs --}}
-                    <canvas id="myChart" class="
+                    <canvas id="myChart"
+                        class="
                         w-full
                         h-full
                     "></canvas>
@@ -82,5 +89,4 @@
             </div>
         </div>
     </div>
-
 </x-app-layout>
