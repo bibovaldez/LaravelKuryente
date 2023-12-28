@@ -68,18 +68,55 @@
                         {{ date('g:i a') }}
                     </div>
                 </div>
-                <div class="bg-slate-400" x-data="{ data: '' }">
-                    {{-- get a get request to the server  --}}
-                    <div x-init="fetch(`/dashboard/fetch_meter_bill`) // Replace with your API endpoint
-                        .then(response => response.json())
-                        .then(data => {
-                            $data.data = data;
-                        })
-                        .catch(error => console.error('Error fetching data:', error));">
-                        <h1>Data:</h1>
-                        <div x-text="data"></div>
+
+
+
+                <div class="bg-slate-400" x-data="{ data: [], selectedYear: '' }" x-init=" data = await (async function(){
+                     const response = await fetch(`/dashboard/fetch_meter_bill`);
+                     const data = await response.json();
+                     // Process data to group by years
+                     const years = Array.from(new Set(data.map(item => item.year_month.slice(0, 4))));
+                     const dataByYear = {};
+                     years.forEach(year => {
+                         dataByYear[year] = data.filter(item => item.year_month.startsWith(year));
+                     });
+                     return dataByYear;
+                    })(); ">
+                    <div class="flex gap-2">
+                        <p>Bill</p>
+                        <select name="year" id="year" x-model="selectedYear">
+                            <option value="">Select Year</option>
+                            <template x-for="year in Object.keys(data)">
+                                <option x-bind:value="year" x-text="year"></option>
+                            </template>
+                        </select>
+                    </div>  
+                    <div x-show="selectedYear">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Month</th>
+                                    <th>Bill Amount</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <template x-for="entry in data[selectedYear]">
+                                    <tr>
+                                        <td x-text="entry.year_month"></td>
+                                        <td x-text="entry.bill_amount"></td>
+                                    </tr>
+                                </template>
+                            </tbody>
+                        </table>
                     </div>
+
+                    
                 </div>
+
+
+
+
+
                 <div class="bg-slate-300">
                     <h4>Meter status</h4>
                     <span class="flex">
