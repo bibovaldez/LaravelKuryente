@@ -15,8 +15,7 @@ let timeUnit = {
     year: false,
 };
 
-
-// create chart 
+// create chart
 (async () => {
     let unit = Object.keys(timeUnit).find((key) => timeUnit[key] === true);
     try {
@@ -114,18 +113,17 @@ let timeUnit = {
     myChart = new Chart(ctx, config);
 })();
 
-
 // time control
-window.setTimeUnit = function (unit) {
+window.setTimeUnit = async function (unit) {
     // Reset all time units to false
     for (let key in timeUnit) {
         timeUnit[key] = false;
     }
     // Set the selected time unit to true
     timeUnit[unit] = true;
-    refreshData();
+    await refreshData();
+    updateChart();
 };
-
 
 // get data
 async function fetchData(unit) {
@@ -209,16 +207,27 @@ async function fetchData(unit) {
     }
 }
 
-
 // refreh data
 async function refreshData() {
     let unit = Object.keys(timeUnit).find((key) => timeUnit[key] === true);
     if (unit) {
         await fetchData(unit);
     }
+    if (unit === "min") {
+        deletData(myChart);
+        addData(myChart, labels[labels.length - 1], usage[usage.length - 1]);
+        refreshtime = 1000;
+    } else if (unit === "hour") {
+        deletData(myChart);
+        addData(myChart, labels[labels.length - 1], usage[usage.length - 1]);
+        refreshtime = 1000 * 60 * 60;
+    } else if (unit === "day") {
+        deletData(myChart);
+        addData(myChart, labels[labels.length - 1], usage[usage.length - 1]);
+        refreshtime = 1000 * 60 * 60 * 24;
+    }
 }
 setInterval(refreshData, refreshtime);
-
 
 // update chart data
 async function updateChart() {
@@ -230,4 +239,19 @@ async function updateChart() {
     myChart.update();
 
     console.log(newData);
+}
+
+function addData(chart, label, data) {
+    chart.data.labels.push(label);
+    chart.data.datasets.forEach((dataset) => {
+        dataset.data.push(data);
+    });
+    chart.update();
+}
+function deletData(chart) {
+    chart.data.labels.shift();
+    chart.data.datasets.forEach((dataset) => {
+        dataset.data.shift();
+    });
+    chart.update();
 }
