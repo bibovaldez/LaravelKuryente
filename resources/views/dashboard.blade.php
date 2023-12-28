@@ -68,8 +68,17 @@
                         {{ date('g:i a') }}
                     </div>
                 </div>
-                <div class="bg-slate-400">Consumption bill
-                    {{-- ul dapat to love pero wala pa d ko pa naayo back end  --}}
+                <div class="bg-slate-400" x-data="{ data: '' }">
+                    {{-- get a get request to the server  --}}
+                    <div x-init="fetch(`/dashboard/fetch_meter_bill`) // Replace with your API endpoint
+                        .then(response => response.json())
+                        .then(data => {
+                            $data.data = data;
+                        })
+                        .catch(error => console.error('Error fetching data:', error));">
+                        <h1>Data:</h1>
+                        <div x-text="data"></div>
+                    </div>
                 </div>
                 <div class="bg-slate-300">
                     <h4>Meter status</h4>

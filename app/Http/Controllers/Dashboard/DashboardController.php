@@ -32,6 +32,9 @@ class DashboardController extends Controller
 
     public function index()
     {
+
+        
+
         $meterinfo = $this->meterinfo; // Add this line to define $meterinfo
         return view('dashboard', compact('meterinfo'));
     }
@@ -65,8 +68,9 @@ class DashboardController extends Controller
 
     public function fetch_meter_bill()
     {
-        // run database query to get the meter bill
-        $meterbill = DB::table('meter_bill')->where('meter_id', $this->meterinfo->id)->get()->toArray();
+        
+        $meterbill = DB::table('monthly_bill')->where('meter_id', $this->meterinfo->id)->get()->toArray();
+        // ddd($meterbill);
         return response()->json($meterbill);
     }
 }

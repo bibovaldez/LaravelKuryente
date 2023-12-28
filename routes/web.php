@@ -31,6 +31,8 @@ Route::middleware(['auth','role:user'])->group(function () {
     // /dashboard/fetch_usage_data?time_unit=min
     Route::get('/dashboard/fetch_usage_data/{unit}', [DashboardController::class, 'fetch_usage_data']);
 
+    Route::get('/dashboard/fetch_meter_bill', [DashboardController::class, 'fetch_meter_bill']);
+
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
 
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');

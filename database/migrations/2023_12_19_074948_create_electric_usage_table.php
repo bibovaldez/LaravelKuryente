@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('electric_usage', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->unsignedBigInteger('meter_id');
-            $table->decimal('usage', 8, 8)->default(0.00000000);
+            $table->float('usage', 15, 8)->default(0.00000000);
             $table->timestamp('recorded_at');
             $table->foreign('meter_id')->references('id')->on('meter')->onDelete('cascade');
         });
