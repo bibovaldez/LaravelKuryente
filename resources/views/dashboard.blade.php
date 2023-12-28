@@ -20,7 +20,7 @@
                             <p>kw</p>
                         </div>
                         {{-- Present --}}
-                        <div class="w-1/2 flex">
+                        <div class="w-1/2 flex" ->
                             <p>Pres:</p>
                             <p>{{ number_format($meterinfo->present_reading, 2) }}</p>
                             <p>kw</p>

@@ -1,0 +1,22 @@
+        switch ($time_unit) {
+            case 'min':
+                
+                break;
+            case 'hour':
+                
+                break;
+            case 'day':
+                $usage = DB::table('1hour_usage')->where('meter_id', $this->meterinfo->id)->get()->toArray();
+                return response()->json($usage);
+                break;
+            case 'month':
+                
+                break;
+            case 'year':
+                $usage = DB::table('1month_usage')->where('meter_id', $this->meterinfo->id)->get()->toArray();
+                return response()->json($usage);
+                break;
+            default:
+                return response()->json("Invalid time unit");
+                break;
+        }

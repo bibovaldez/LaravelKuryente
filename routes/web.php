@@ -29,7 +29,7 @@ Route::middleware(['auth','role:user'])->group(function () {
 
 
     // /dashboard/fetch_usage_data?time_unit=min
-    Route::get('/dashboard/fetch_usage_data/{time_unit}', [DashboardController::class, 'fetch_usage_data']);
+    Route::get('/dashboard/fetch_usage_data/{unit}', [DashboardController::class, 'fetch_usage_data']);
 
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
 

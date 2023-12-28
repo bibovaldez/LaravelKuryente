@@ -14,7 +14,7 @@ class DashboardController extends Controller
     /**
      * Fetch usage data based on the provided time unit.
      *
-     * @param  string  $time_unit
+     * @param  string  $unit
      * @return \Illuminate\Http\Response
      */
     protected $meterinfo;
@@ -36,30 +36,32 @@ class DashboardController extends Controller
         return view('dashboard', compact('meterinfo'));
     }
 
-    public function fetch_usage_data($time_unit)
+    public function fetch_usage_data($unit)
     {
-        switch ($time_unit) {
-            case 'min':
-                $usage = DB::table('electric_usage')->where('meter_id', $this->meterinfo->id)->get()->toArray();
-                return response()->json($usage);
-                break;
-            case 'hour':
-                $usage = DB::table('1hour_usage')->where('meter_id', $this->meterinfo->id)->get()->toArray();
-                return response()->json($usage);
-                break;
-            case 'day':
-                $usage = DB::table('1day_usage')->where('meter_id', $this->meterinfo->id)->get()->toArray();
-                return response()->json($usage);
-                break;
-            case 'month':
-                $usage = DB::table('1month_usage')->where('meter_id', $this->meterinfo->id)->get()->toArray();
-                return response()->json($usage);
-                break;
-            default:
-                return response()->json("Invalid time unit");
-                break;
+        $tableNames = [
+            'min' => 'electric_usage',
+            'hour' => '1min_usage',
+            'day' => '1hour_usage',
+            'month' => '1day_usage',
+            'year' => '1month_usage',
+        ];
+
+        if (!array_key_exists($unit, $tableNames)) {
+            // Log an error message
+            error_log("Invalid unit value: $unit");
+            // Return an error response
+            return response()->json(['error' => 'Invalid unit value'], 400);
+            return;
         }
+
+        $usage = DB::table($tableNames[$unit])
+            ->where('meter_id', $this->meterinfo->id)
+            ->get()
+            ->toArray();
+
+        return response()->json($usage);
     }
+
 
     public function fetch_meter_bill()
     {

@@ -20,15 +20,13 @@ class ElectricUsageTableSeeder extends Seeder
         $meters = Meter::all();
         foreach ($meters as $meter) {
             // Generate random usage data for each user and meter
-            for ($i = 0; $i < 100; $i++) {
+            for ($i = 100; $i > 0; $i--) {
                 DB::table('electric_usage')->insert([
                     // get the first user and meter
                     'meter_id' => $meter->id,
                     // Random usage between 0.001  and 0.003
                     'usage' => (0.001 + mt_rand() / getrandmax() * (0.003 - 0.001)),
                     'recorded_at' => Carbon::now()->subSeconds($i),
-                    'created_at' => Carbon::now(),
-                    'updated_at' => Carbon::now(),
                 ]);
             }
         }

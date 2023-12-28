@@ -1,8 +1,12 @@
 import Chart from "chart.js/auto";
+let ctx;
+let myChart;
 let usage = [];
 let labels = [];
 let usageData = [];
 let refreshtime = 1000;
+let data = [];
+let config = {};
 let timeUnit = {
     min: true,
     hour: false,
@@ -11,6 +15,107 @@ let timeUnit = {
     year: false,
 };
 
+
+// create chart 
+(async () => {
+    let unit = Object.keys(timeUnit).find((key) => timeUnit[key] === true);
+    try {
+        const response = await fetch(`/dashboard/fetch_usage_data/${unit}`);
+        const data = await response.json();
+        usage = data.map((item) => item.usage).slice(-60);
+        labels = data
+            .map((item) => {
+                const date = new Date(item.recorded_at);
+                let formattedDate;
+                switch (unit) {
+                    case "min":
+                        formattedDate = `${date
+                            .getMinutes()
+                            .toString()
+                            .padStart(2, "0")}:${date
+                            .getSeconds()
+                            .toString()
+                            .padStart(2, "0")}`;
+                        break;
+                    case "hour":
+                        formattedDate = `${date
+                            .getHours()
+                            .toString()
+                            .padStart(2, "0")}:${date
+                            .getMinutes()
+                            .toString()
+                            .padStart(2, "0")}`;
+                        break;
+                    case "day":
+                        formattedDate = `${date
+                            .getHours()
+                            .toString()
+                            .padStart(2, "0")}:${date
+                            .getMinutes()
+                            .toString()
+                            .padStart(2, "0")}`;
+                        break;
+                    case "month":
+                        formattedDate = `${(date.getMonth() + 1)
+                            .toString()
+                            .padStart(2, "0")}-${date
+                            .getDate()
+                            .toString()
+                            .padStart(2, "0")}`;
+                        break;
+                    case "year":
+                        formattedDate = `${date.getFullYear()}-${(
+                            date.getMonth() + 1
+                        )
+                            .toString()
+                            .padStart(2, "0")}`;
+                        break;
+                    default:
+                        formattedDate = date.toString();
+                        break;
+                }
+                return formattedDate;
+            })
+            .slice(-60);
+    } catch (error) {
+        console.error("Error:", error);
+    }
+    data = [
+        {
+            label: "Usage",
+            data: usage,
+            borderColor: "rgba(255, 99, 132, 1)",
+            fill: false,
+            cubicInterpolationMode: "monotone",
+            tension: 0.4,
+        },
+    ];
+    config = {
+        type: "line",
+        data: {
+            labels: labels,
+            datasets: data,
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                legend: {
+                    position: "bottom",
+                },
+                title: {
+                    display: true,
+                    text: "Usage Chart",
+                    position: "bottom",
+                },
+            },
+        },
+    };
+    ctx = document.getElementById("myChart").getContext("2d");
+    myChart = new Chart(ctx, config);
+})();
+
+
+// time control
 window.setTimeUnit = function (unit) {
     // Reset all time units to false
     for (let key in timeUnit) {
@@ -21,108 +126,108 @@ window.setTimeUnit = function (unit) {
     refreshData();
 };
 
-// fetch data from the server without reloading the page
-async function refreshData() {
-    switch (true) {
-        case timeUnit.min:
-            await fetch("/dashboard/fetch_usage_data/min")
-                .then((response) => response.json())
-                .then((data) => {
-                    usage = data.map((item) => item.usage).slice(0,60);
-                    labels = data.map((item) => item.recorded_at).slice(0,60);
-                    refreshtime = 1000;
-                    console.log(labels);
-                })
-                .catch((error) => console.error("Error:", error));
+
+// get data
+async function fetchData(unit) {
+    let sliceAmount;
+    switch (unit) {
+        case "min":
+        case "hour":
+            sliceAmount = -60;
             break;
-        case timeUnit.hour:
-            await fetch("/dashboard/fetch_usage_data/hour")
-                .then((response) => response.json())
-                .then((data) => {
-                    usage = data.map((item) => item.usage);
-                    labels = data.map((item) => item.recorded_at);
-                    refreshtime = 1000 * 60;
-                })
-                .catch((error) => console.error("Error:", error));
+        case "day":
+        case "year":
+            sliceAmount = -12;
             break;
-        case timeUnit.day:
-            await fetch("/dashboard/fetch_usage_data/day")
-                .then((response) => response.json())
-                .then((data) => {
-                    usage = data.map((item) => item.usage);
-                    labels = data.map((item) => item.recorded_at);
-                    refreshtime = 1000 * 60 * 60;
-                })
-                .catch((error) => console.error("Error:", error));
-            break;
-        case timeUnit.month:
-            await fetch("/dashboard/fetch_usage_data/month")
-                .then((response) => response.json())
-                .then((data) => {
-                    usage = data.map((item) => item.usage);
-                    labels = data.map((item) => item.recorded_at);
-                    refreshtime = 1000 * 60 * 60 * 24;
-                })
-                .catch((error) => console.error("Error:", error));
-            break;
-        case timeUnit.year:
-            await fetch("/dashboard/fetch_usage_data/year")
-                .then((response) => response.json())
-                .then((data) => {
-                    usage = data.map((item) => item.usage);
-                    labels = data.map((item) => item.recorded_at);
-                    refreshtime = 1000 * 60 * 60 * 24 * 30;
-                })
-                .catch((error) => console.error("Error:", error));
+        case "month":
+            sliceAmount = -30;
             break;
         default:
-            break;
+            return;
+    }
+    // fetch data from the server
+    try {
+        const response = await fetch(`/dashboard/fetch_usage_data/${unit}`);
+        const data = await response.json();
+        usage = data.map((item) => item.usage).slice(sliceAmount);
+        labels = data
+            .map((item) => {
+                const date = new Date(item.recorded_at);
+                let formattedDate;
+                switch (unit) {
+                    case "min":
+                        formattedDate = `${date
+                            .getMinutes()
+                            .toString()
+                            .padStart(2, "0")}:${date
+                            .getSeconds()
+                            .toString()
+                            .padStart(2, "0")}`;
+                        break;
+                    case "hour":
+                        formattedDate = `${date
+                            .getHours()
+                            .toString()
+                            .padStart(2, "0")}:${date
+                            .getMinutes()
+                            .toString()
+                            .padStart(2, "0")}`;
+                        break;
+                    case "day":
+                        formattedDate = `${date
+                            .getHours()
+                            .toString()
+                            .padStart(2, "0")}:${date
+                            .getMinutes()
+                            .toString()
+                            .padStart(2, "0")}`;
+                        break;
+                    case "month":
+                        formattedDate = `${(date.getMonth() + 1)
+                            .toString()
+                            .padStart(2, "0")}-${date
+                            .getDate()
+                            .toString()
+                            .padStart(2, "0")}`;
+                        break;
+                    case "year":
+                        formattedDate = `${date.getFullYear()}-${(
+                            date.getMonth() + 1
+                        )
+                            .toString()
+                            .padStart(2, "0")}`;
+                        break;
+                    default:
+                        formattedDate = date.toString();
+                        break;
+                }
+                return formattedDate;
+            })
+            .slice(sliceAmount);
+    } catch (error) {
+        console.error("Error:", error);
+    }
+}
+
+
+// refreh data
+async function refreshData() {
+    let unit = Object.keys(timeUnit).find((key) => timeUnit[key] === true);
+    if (unit) {
+        await fetchData(unit);
     }
 }
 setInterval(refreshData, refreshtime);
-refreshData();
-// // create a chart
-// const ctx = document.getElementById("myChart");
-// async function createChart() {
-//     await refreshData();
-//     const myChart = new Chart(ctx, {
-//         type: "line",
-//         data: {
-//             labels: labels,
-//             datasets: [
-//                 {
-//                     label: "Cubic interpolation (monotone)",
-//                     data:usage ,
-//                     borderColor: "rgb(75, 192, 192)",
-//                     fill: false,
-//                     cubicInterpolationMode: "monotone",
-//                     tension: 0.4,
-//                 },
-//             ],
-//         },
-//         options: {
-//             responsive: true,
-//             plugins: {
-//                 title: {
-//                     display: true,
-//                     text: "Chart.js Line Chart - Cubic interpolation mode",
-//                 },
-//             },
-//             scales: {
-//                 x: {
-//                     display: true,
-//                     title: {
-//                         display: true,
-//                     },
-//                 },
-//                 y: {
-//                     display: true,
-//                     title: {
-//                         display: true,
-//                         text: "Value",
-//                     },
-//                 },
-//             },
-//         },
-//     });
-// }
+
+
+// update chart data
+async function updateChart() {
+    var newData = usage;
+    var newLabels = labels;
+
+    myChart.data.labels = newLabels;
+    myChart.data.datasets[0].data = newData;
+    myChart.update();
+
+    console.log(newData);
+}
