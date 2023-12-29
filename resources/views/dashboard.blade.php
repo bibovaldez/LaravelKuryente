@@ -1,34 +1,44 @@
 <x-app-layout>
-    <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            {{ __('Dashboard') }}
-        </h2>
-    </x-slot>
-
     <div class="py-12 flex flex-wrap h-max">
         <div class="w-2/3 h-max">
 
             <div class="flex flex-wrap flex-col h-max">
 
                 <div class="bg-slate-400 h-1/6 w-full">
-                    <div class="flex gap-2">
+                    <div class="flex gap-2" x-data="{ present: 'Loading...' , previous: 'Loading...' , total: 'Loading...' }">
                         <p>Consumption </p>
                         {{-- Previous --}}
-                        <div class="w-1/2 flex">
+                        <div class="w-1/2 flex" x-init="setInterval(() => {
+                            fetch('/dashboard/Consumption') // replace with your API endpoint
+                                .then(response => response.json())
+                                .then(data => {
+                                    console.log(data);
+                                    previous = data.previous_reading.toFixed(2);
+                                })
+                                .catch(error => console.error('Error:', error));
+                        }, 1000)">
                             <p>Prev:</p>
-                            <p>{{ number_format($meterinfo->previous_reading, 2) }}</p>
+                            <p x-text="previous"></p>
                             <p>kw</p>
                         </div>
                         {{-- Present --}}
-                        <div class="w-1/2 flex" ->
+                        <div class="w-1/2 flex" x-init="setInterval(() => {
+                            fetch('/dashboard/Consumption') // replace with your API endpoint
+                                .then(response => response.json())
+                                .then(data => {
+                                    present = data.present_reading.toFixed(2);
+                                    total = (data.present_reading - data.previous_reading).toFixed(2);
+                                })
+                                .catch(error => console.error('Error:', error));
+                        }, 1000)">
                             <p>Pres:</p>
-                            <p>{{ number_format($meterinfo->present_reading, 2) }}</p>
+                            <p x-text="present"></p>
                             <p>kw</p>
                         </div>
                         {{-- Total --}}
                         <div class="w-1/2 flex">
                             <p>Total kWh used:</p>
-                            <p>{{ number_format($meterinfo->present_reading - $meterinfo->previous_reading, 2) }}</p>
+                            <p x-text="total"></p>
                             <p>kW</p>
                         </div>
                     </div>
@@ -71,7 +81,7 @@
 
 
 
-                <div class="bg-slate-400" x-data="{ data: [], selectedYear: '' }" x-init=" data = await (async function(){
+                <div class="bg-slate-400" x-data="{ data: [], selectedYear: '' }" x-init=" data = await (async function() {
                      const response = await fetch(`/dashboard/fetch_meter_bill`);
                      const data = await response.json();
                      // Process data to group by years
@@ -81,7 +91,7 @@
                          dataByYear[year] = data.filter(item => item.year_month.startsWith(year));
                      });
                      return dataByYear;
-                    })(); ">
+                 })();">
                     <div class="flex gap-2">
                         <p>Bill</p>
                         <select name="year" id="year" x-model="selectedYear">
@@ -90,7 +100,7 @@
                                 <option x-bind:value="year" x-text="year"></option>
                             </template>
                         </select>
-                    </div>  
+                    </div>
                     <div x-show="selectedYear">
                         <table>
                             <thead>
@@ -110,7 +120,7 @@
                         </table>
                     </div>
 
-                    
+
                 </div>
 
 

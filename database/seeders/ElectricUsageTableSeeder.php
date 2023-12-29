@@ -41,6 +41,21 @@ class ElectricUsageTableSeeder extends Seeder
                 ]);
             }
         }
+        // seed the 1min_usage
+        foreach ($meters as $meter) {
+            $usagemarkk = 0; // Initialize usagemarkk for each meter
+            for ($i = 60; $i > 0; $i--) {
+                $usage = round((0.011 + mt_rand() / getrandmax() * (0.033 - 0.011)), 6);
+                $usagemarkk += $usage;
+                $usagemarkround = round($usagemarkk, 6);
+                DB::table('1min_usage')->insert([
+                    'meter_id' => $meter->id,
+                    'usage' => $usage,
+                    'recorded_at' => Carbon::now()->subSeconds($i),
+                    'usagemark' => $usagemarkround,
+                ]);
+            }
+        }
 
         // seed the 1hour_usage
         foreach ($meters as $meter) {

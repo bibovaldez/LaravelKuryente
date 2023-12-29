@@ -33,6 +33,8 @@ Route::middleware(['auth','role:user'])->group(function () {
 
     Route::get('/dashboard/fetch_meter_bill', [DashboardController::class, 'fetch_meter_bill']);
 
+    Route::get('/dashboard/Consumption', [DashboardController::class, 'Consumption']);
+
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
 
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');

@@ -4,7 +4,7 @@ let myChart;
 let usage = [];
 let labels = [];
 let usageData = [];
-let refreshtime = 1000;
+let timer = 1000;
 let data = [];
 let config = {};
 let timeUnit = {
@@ -14,6 +14,20 @@ let timeUnit = {
     month: false,
     year: false,
 };
+let presentConsumption = document.getElementById("presentConsumption");
+// listen for the event
+const userId = document.head.querySelector('meta[name="user-id"]').content;
+
+// Now you can use `userId` in your channel name:
+Echo.private(`private.meter-channel.${userId}`)
+    .subscribed(() => {
+        console.log("subscribed");
+    })
+    .listen(".meter-event", (event) => {
+        console.log("data");
+        console.log(event);
+        refreshData();
+    });
 
 // create chart
 (async () => {
@@ -216,18 +230,13 @@ async function refreshData() {
     if (unit === "min") {
         deletData(myChart);
         addData(myChart, labels[labels.length - 1], usage[usage.length - 1]);
-        refreshtime = 1000;
-    } else if (unit === "hour") {
-        deletData(myChart);
-        addData(myChart, labels[labels.length - 1], usage[usage.length - 1]);
-        refreshtime = 1000 * 60 * 60;
-    } else if (unit === "day") {
-        deletData(myChart);
-        addData(myChart, labels[labels.length - 1], usage[usage.length - 1]);
-        refreshtime = 1000 * 60 * 60 * 24;
     }
 }
-setInterval(refreshData, refreshtime);
+
+
+
+
+
 
 // update chart data
 async function updateChart() {

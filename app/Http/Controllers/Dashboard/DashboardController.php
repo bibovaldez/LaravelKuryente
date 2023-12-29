@@ -19,8 +19,6 @@ class DashboardController extends Controller
      */
     protected $meterinfo;
 
-
-
     public function __construct()
     {
 
@@ -32,8 +30,6 @@ class DashboardController extends Controller
 
     public function index()
     {
-
-        
 
         $meterinfo = $this->meterinfo; // Add this line to define $meterinfo
         return view('dashboard', compact('meterinfo'));
@@ -68,9 +64,13 @@ class DashboardController extends Controller
 
     public function fetch_meter_bill()
     {
-        
         $meterbill = DB::table('monthly_bill')->where('meter_id', $this->meterinfo->id)->get()->toArray();
         // ddd($meterbill);
         return response()->json($meterbill);
+    }
+    public function Consumption()
+    {
+        $Consumption = DB::table('meter')->where('id', $this->meterinfo->id)->orderBy('id', 'desc')->first();
+        return response()->json($Consumption);
     }
 }
