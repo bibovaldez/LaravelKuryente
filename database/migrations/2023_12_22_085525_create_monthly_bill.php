@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('meter_id');
             $table->char('year_month', 7);
-            $table->float('bill_amount', 10, 2);
+            $table->decimal('bill_amount', 18, 10);
             $table->foreign('meter_id')->references('id')->on('meter')->onDelete('cascade');
         });
     }

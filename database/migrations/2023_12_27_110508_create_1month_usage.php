@@ -14,9 +14,9 @@ return new class extends Migration
         Schema::create('1month_usage', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->unsignedBigInteger('meter_id');
-            $table->float('usage', 15, 8);
+            $table->decimal('usage', 18, 10);
             $table->timestamp('recorded_at');
-            $table->float('usagemark',15, 8);
+            $table->decimal('usagemark',18, 10);
             $table->foreign('meter_id')->references('id')->on('meter')->onDelete('cascade');
         });
     }

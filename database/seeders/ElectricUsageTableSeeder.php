@@ -33,7 +33,7 @@ class ElectricUsageTableSeeder extends Seeder
 
         // seed the monthly bill
         foreach ($meters as $meter) {
-            for ($i = 100; $i > 0; $i--) {
+            for ($i = 12; $i > 0; $i--) {
                 DB::table('monthly_bill')->insert([
                     'meter_id' => $meter->id,
                     'year_month' => Carbon::now()->subMonths($i)->format('Y-m'),

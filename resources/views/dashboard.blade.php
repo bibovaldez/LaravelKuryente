@@ -12,8 +12,7 @@
                             fetch('/dashboard/Consumption') // replace with your API endpoint
                                 .then(response => response.json())
                                 .then(data => {
-                                    console.log(data);
-                                    previous = data.previous_reading.toFixed(2);
+                                    previous = parseFloat(data.previous_reading).toFixed(2);
                                 })
                                 .catch(error => console.error('Error:', error));
                         }, 1000)">
@@ -26,8 +25,8 @@
                             fetch('/dashboard/Consumption') // replace with your API endpoint
                                 .then(response => response.json())
                                 .then(data => {
-                                    present = data.present_reading.toFixed(2);
-                                    total = (data.present_reading - data.previous_reading).toFixed(2);
+                                    present = parseFloat(data.present_reading).toFixed(2);
+                                    total = (parseFloat(data.present_reading) - parseFloat(data.previous_reading)).toFixed(2);
                                 })
                                 .catch(error => console.error('Error:', error));
                         }, 1000)">

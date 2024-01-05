@@ -3,8 +3,6 @@ let ctx;
 let myChart;
 let usage = [];
 let labels = [];
-let usageData = [];
-let timer = 1000;
 let data = [];
 let config = {};
 let timeUnit = {
@@ -24,8 +22,6 @@ Echo.private(`private.meter-channel.${userId}`)
         console.log("subscribed");
     })
     .listen(".meter-event", (event) => {
-        console.log("data");
-        console.log(event);
         refreshData();
     });
 
@@ -233,11 +229,6 @@ async function refreshData() {
     }
 }
 
-
-
-
-
-
 // update chart data
 async function updateChart() {
     var newData = usage;
@@ -246,8 +237,6 @@ async function updateChart() {
     myChart.data.labels = newLabels;
     myChart.data.datasets[0].data = newData;
     myChart.update();
-
-    console.log(newData);
 }
 
 function addData(chart, label, data) {

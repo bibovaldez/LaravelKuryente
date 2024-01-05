@@ -1,21 +1,3 @@
-INSERT INTO 1hour_usage (meter_id, `usage`, recorded_at, usagemark)
-SELECT
-    m.id,
-    COALESCE(
-        (
-            SELECT
-                u.`usagemark`
-            FROM
-                `1hour_usage` u
-            WHERE
-                u.`meter_id` = m.`id`
-            ORDER BY
-                u.`recorded_at` DESC
-            LIMIT 1
-        ),
-        0
-    ) + m.`present_reading` - m.`previous_reading`,
-    NOW(),
-    present_reading
-FROM
-    `meter` m;
+INSERT INTO 
+    `electric_usage` 
+    (`F_MID`, `usage`, `updated_at`, `created_at`) VALUES (1Q2W3E4R5T6Y, dawd, 2023-12-30 03:37:39, 2023-12-30 03:37:39);

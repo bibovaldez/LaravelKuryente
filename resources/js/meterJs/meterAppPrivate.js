@@ -6,6 +6,6 @@ Echo.private(`private.meter-channel.${userId}`)
         console.log("subscribed");
     })
     .listen(".meter-event", (event) => {
-        console.log("data");
-        console.log(event);
+        // console.log("data");
+        // console.log(event);
     });

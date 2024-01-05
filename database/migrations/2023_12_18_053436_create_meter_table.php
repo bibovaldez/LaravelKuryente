@@ -16,9 +16,9 @@ return new class extends Migration
             $table->string('MID')->unique();
             $table->enum('type',['residential','industrial'])->default('residential');
             $table->enum('status',['active','inactive'])->default('active');
-            $table->float('rate', 8, 4)->default(9.6758);
-            $table->float('present_reading',8, 8)->default(0.00000000);
-            $table->float('previous_reading',8, 8)->default(0.00000000);
+            $table->decimal('rate', 8, 4)->default(9.6758);
+            $table->decimal('present_reading',18,10)->default(0.00000000);
+            $table->decimal('previous_reading',18,10)->default(0.00000000);
             $table->string('PIN')->unique();
             $table->string('Owner');
             $table->string('Address');
