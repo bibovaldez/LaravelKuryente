@@ -84,6 +84,7 @@ export default {
                 },
                 black: {
                     light: "#2D2006",
+                    dark: "#000000",
                 },
                 violet: {
                     light: "#8C52FF",
@@ -91,6 +92,7 @@ export default {
                 red: {
                     light: "#00BF63",
                     default: "#FBC5C5",
+                    dark: "#FF3131",
                 },
             },
         },

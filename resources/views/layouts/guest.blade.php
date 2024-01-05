@@ -19,16 +19,21 @@
 <body class="font-sans antialiased overflow-x-hidden overflow-y-hidden">
     {{-- background --}}
     <div
-        class="absolute object-none bg-cover drop-shadow-lg z-0 w-full sm:w-2/3 -left-72  h-screen bg-gradient-to-tr from-violet-light to-red-light rounded-3xl rotate-45">
+        class="absolute object-none bg-cover drop-shadow-lg z-0 w-full sm:w-2/3 -left-80  h-screen bg-gradient-to-tr from-violet-light to-red-light rounded-3xl rotate-45">
     </div>
     {{-- form --}}
     <div class="min-h-screen flex flex-col sm:justify-center items-center pt-6 sm:pt-0 bg-gray-100 z-10">
         {{-- logo --}}
-        <div class="z-10">
-            <a href="/">
-                <x-application-logo style="height: 7%; width: 7%;" class="w-20 h-20 fill-current" />
-            </a>
-        </div>
+        <a href="/">
+            <div class="z-10 flex items-center -mb-1 ">
+
+                <img class="h-16 w-14" src="{{ asset('img/applicationlogo.png') }}">
+                <p style="font-size: 2.5vw;" class="ml-1 font-boldglacial font-bold text-green-dark tracking-normal">
+                    iKuryente
+                </p>
+            </div>
+        </a>
+
         {{-- form --}}
         <div class=" z-10 w-full sm:max-w-md mt-6 px-6 py-4 bg-white shadow-md overflow-hidden sm:rounded-lg">
             {{ $slot }}
