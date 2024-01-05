@@ -21,8 +21,8 @@ Echo.private(`private.meter-channel.${userId}`)
     .subscribed(() => {
         console.log("subscribed");
     })
-    .listen(".meter-event", (event) => {
-        refreshData();
+    .listen(".meter-event", async (event) => {
+        await refreshData();
     });
 
 // create chart
@@ -111,11 +111,7 @@ Echo.private(`private.meter-channel.${userId}`)
                 legend: {
                     position: "bottom",
                 },
-                title: {
-                    display: true,
-                    text: "Usage Chart",
-                    position: "bottom",
-                },
+                
             },
         },
     };

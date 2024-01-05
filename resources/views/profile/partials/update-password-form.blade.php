@@ -12,7 +12,15 @@
     <form method="post" action="{{ route('password.update') }}" class="mt-6 space-y-6">
         @csrf
         @method('put')
-
+        @if (session('status') === 'password-updated')
+                <p
+                    x-data="{ show: true }"
+                    x-show="show"
+                    x-transition
+                    x-init="setTimeout(() => show = false, 2000)"
+                    class=" m-6 bg-green-500 text-white py-2 px-4 rounded"
+                >{{ __('Saved.') }}</p>
+            @endif
         <div>
             <x-input-label for="update_password_current_password" :value="__('Current Password')" />
             <x-text-input id="update_password_current_password" name="current_password" type="password" class="mt-1 block w-full" autocomplete="current-password" />
@@ -34,15 +42,7 @@
         <div class="flex items-center gap-4">
             <x-primary-button>{{ __('Save') }}</x-primary-button>
 
-            @if (session('status') === 'password-updated')
-                <p
-                    x-data="{ show: true }"
-                    x-show="show"
-                    x-transition
-                    x-init="setTimeout(() => show = false, 2000)"
-                    class="text-sm text-gray-600"
-                >{{ __('Saved.') }}</p>
-            @endif
+            
         </div>
     </form>
 </section>

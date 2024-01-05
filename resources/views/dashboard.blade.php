@@ -103,6 +103,10 @@
                         h-full
                     "></canvas>
                 </div>
+                {{-- Download info --}}
+                <div>
+                    
+                </div>
 
             </div>
 
