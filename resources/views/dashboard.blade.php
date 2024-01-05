@@ -6,7 +6,7 @@
     </x-slot>
 
     <div class="flex flex-wrap border-t-2 border-blue border-opacity-80 ">
-        <div class="w-2/3 h-max border-r-2 ">
+        <div class="w-2/3 h-max">
 
             <div class="flex flex-wrap flex-col h-max">
 
